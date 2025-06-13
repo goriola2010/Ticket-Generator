@@ -22,22 +22,23 @@ function App() {
     e.preventDefault();
     setIsSubmitted(true);
   };
-  const handleDownload = () => {
-    if (ticketRef.current) {
-      setTimeout(() => {
-        html2canvas(ticketRef.current, { backgroundColor: "#fff" }).then(
-          (canvas) => {
-            // Show canvas for debug (optional, remove if not needed)
-            // document.body.appendChild(canvas);
 
-            const link = document.createElement("a");
-            link.download = "ticket.png";
-            link.href = canvas.toDataURL("image/png");
-            link.click();
-          }
-        );
-      }, 100);
-    }
+  const handleDownload = () => {
+    const element = ticketRef.current;
+    if (!element) return;
+
+    // Fix for font, background and dimensions
+    html2canvas(element, {
+      scale: 2, // higher resolution
+      useCORS: true,
+      backgroundColor: "#ffffff",
+      allowTaint: true,
+    }).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = "ticket.png";
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    });
   };
 
   return (
